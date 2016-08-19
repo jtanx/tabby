@@ -1,0 +1,11 @@
+/** {
+    zoom:1;
+    -ms-content-zooming:none;
+}
+*/
+
+body {
+    overflow: hidden;
+    -ms-content-zooming: none;
+    height: 100%;
+}

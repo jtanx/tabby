@@ -1,0 +1,13 @@
+.btn-link {
+    text-decoration: none !important;
+}
+
+#weather-info {
+    overflow-y: auto;
+    position: relative;
+    max-height: calc(100vh - 110px);
+}
+
+#type {
+    margin-top: 0 !important;
+}
