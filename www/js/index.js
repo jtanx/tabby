@@ -1,5 +1,7 @@
 document.addEventListener("deviceready", onDeviceReady, false);
 
+var weather;
+
 //http://stackoverflow.com/questions/6507293/convert-xml-to-string-with-jquery
 function xmlToString(xmlData) { 
     var xmlString;
@@ -27,8 +29,14 @@ function processWeather(xml) {
             window.localStorage.setItem("cachedDay", d.getDay().toString());
         }
         
-        var ent = $("<a/>", {"class" : "list-group-item", "href" : "#day" + i.toString()});
-        ent.append($("<h4/>", {"class" : "list-group-item-heading"}).text(dayStr));
+        var ent = $("<div/>", {"class": "dropdown"});
+        var entShort = $("<a/>", {
+            "class" : "list-group-item dropdown-toggle",
+            "href" : "#day" + i.toString(),
+            "aria-expanded" : "false",
+            "data-toggle" : "dropdown"
+        });
+        entShort.append($("<h4/>", {"class" : "list-group-item-heading"}).text(dayStr));
         
         var precis = $(v).find("text[type='precis']").text();
         var pop = " ☔ " + $(v).find("text[type='probability_of_precipitation']").text()
@@ -40,8 +48,16 @@ function processWeather(xml) {
         
         precis = precis + " " + min + max + pop;
         
-        ent.append($("<p/>", {"class" : "list-group-item-text"}).text(precis));
+        entShort.append($("<p/>", {"class" : "list-group-item-text"}).text(precis));
+        var entDetail = $("<a/>", {"href" : "#"});
         
+        var forecast = $(weather).find("area[aac='WA_ME001'] forecast-period[index=" + i.toString() + "]");
+        
+        entDetail.text($(forecast).find("text[type='forecast']").text());
+        
+        ent.append(entShort);
+        ent.append($("<ul/>", {"class" : "dropdown-menu dropdown-weather"}).append(
+            $("<li/>").append(entDetail)));
         ctr.append(ent);
         console.log(v);
         return i<4;
@@ -56,6 +72,7 @@ function getWeather() {
         url: "https://asweather-jtanx.rhcloud.com/perth-xml.php",
         dataType: "xml",
         success: function(xml) {
+            weather = xml;
             processWeather(xml)
             window.localStorage.setItem("cachedWeather", xmlToString(xml));
             $("#fetch").removeClass("disabled").addClass("text-success");
@@ -79,7 +96,8 @@ function onDeviceReady() {
     var cachedDay = window.localStorage.getItem("cachedDay");
     
     if (cachedWeather) {
-        processWeather($.parseXML(cachedWeather));
+        weather = $.parseXML(cachedWeather);
+        processWeather(weather);
     }
     
     if (cachedWeather && cachedDay) {

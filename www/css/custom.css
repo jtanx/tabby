@@ -11,3 +11,20 @@
 #type {
     margin-top: 0 !important;
 }
+
+.dropdown-weather {
+    width: 100%;
+}
+
+.dropdown-weather {
+    background: #fff;
+}
+
+.dropdown-weather a:hover, .dropdown-weather a:active, .dropdown-weather a:focus {
+    background: #fff !important;
+    color: #000 !important;
+}
+
+.dropdown-weather a {
+    white-space: inherit !important;
+}
